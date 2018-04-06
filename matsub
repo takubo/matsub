@@ -1,14 +1,14 @@
 #!/usr/bin/awk -f
 BEGIN {
 	if (ARGC != 3) {
-		print "matsub : error : number of arguments is not 3."
+		print "matsub : error : number of arguments is not 2."
 		exit error = 1
 	}
 
 	cellrow = 0
 }
 
-FILENAME == ARGV[1] && $0 != "" {
+FILENAME == ARGV[1] && $0 != "" && $0 !~ /^[ \t]*#/ {
 	for (i = 1; i <= NF; i++)
 		cell[cellrow, i] = $i
 
