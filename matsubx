@@ -2,7 +2,7 @@
 
 BEGIN {
 	if (ARGC < 3) {
-		print "matsubx : error : number of arguments is not 3." > "/dev/stderr"
+		print "matsubx : error : number of arguments is not 2." > "/dev/stderr"
 		exit error = 1
 	}
 	PROCINFO["sorted_in"] = "@ind_num_asc"
@@ -27,7 +27,7 @@ FILENAME == ARGV[1] && $0 != "" && $0 !~ /^[ \t]*#/ {
 
 /^%}$/ {
 	printline()
-	nextline
+	next
 }
 
 capture {
@@ -38,7 +38,7 @@ capture {
 	capture = 1
 }
 
-!capture
+!capture { print }
 
 ENDFILE {
 	if (capture) printline()
