@@ -1,0 +1,45 @@
+#!/usr/bin/gawk -f
+BEGIN {
+	if (ARGC < 3) {
+		print "matsub : error : number of arguments is not 3."
+		exit error = 1
+	}
+
+	cellrow = 0
+}
+
+FILENAME == ARGV[1] && $0 != "" && $0 !~ /^[ \t]*#/ {
+	for (i = 1; i <= NF; i++)
+		cell[cellrow, i] = $i
+
+	if (FNR == 1) {
+		cellcol = NF
+	} else if (NF != cellcol) {
+		print "matsub : error : number of collumn is not", cellcol ". FNR =", FNR
+		exit error = 2
+	}
+
+	cellrow++
+	next
+}
+
+{
+	line[FNR] = $0
+}
+
+ENDFILE {
+	for (i = 1; i < cellrow; i++)
+		for (j = 1; j <= FNR; j++) {
+			$0 = line[j]
+			for (k = 1; k <= cellcol; k++)
+				gsub(cell[0, k], cell[i, k])
+			print
+		}
+
+	delete line
+}
+
+END {
+	if (error)
+		exit error
+}
